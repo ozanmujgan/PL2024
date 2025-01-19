@@ -1,0 +1,2 @@
+# PL2024
+CSE341 LISP (avg 80)
