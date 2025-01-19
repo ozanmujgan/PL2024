@@ -1,0 +1,198 @@
+1) "defun split-string (string delimiter)"
+split-string: Bu fonksiyon, verilen bir metni (string) belirtilen bir ayraca (delimiter) göre böler. Metnin her bir parçasını ayrı bir liste elemanı olarak döndürür. Örneğin, eğer metin "Merhaba, dünya!" ve ayıracınız ", " ise, fonksiyon ("Merhaba" "dünya!") şeklinde bir liste döndürecektir.
+
+Parametreler:
+
+string: Bölünecek metin.
+delimiter: Metni bölecek ayıraç.
+Çalışma mantığı:
+
+loop ifadesiyle metin içinde ayracın bulunduğu yerler aranır.
+Bulunan her ayracın önündeki kısmı alıp result listesine ekler.
+Sonuçta, metnin son kısmı da eklenir ve result listesi ters çevrilerek (nreverse) geri döndürülür.
+replace-all: Bu fonksiyon, verilen metindeki tüm old ifadelerini new ile değiştirir. Yani, metindeki belirli bir kelimenin (ya da ifadenin) hepsini başka bir kelime (ya da ifade) ile değiştirir.
+
+Parametreler:
+
+string: İçinde değişiklik yapılacak metin.
+old: Değiştirilecek ifade.
+new: old ifadesinin yerini alacak yeni ifade.
+Çalışma mantığı:
+
+split-string fonksiyonunu kullanarak metni boşluklara göre böler.
+loop ifadesiyle her parçayı kontrol eder ve eğer parça old ifadesine eşitse, new ifadesini yazdırır, aksi takdirde mevcut parçayı yazdırır.
+Her parçadan sonra bir boşluk ekleyerek çıktıyı oluşturur ve sonuç olarak yeni metni döndürür.
+
+2)"defun replace-all (string old new)"
+
+replace-all fonksiyonu, verilen bir metindeki belirli bir ifadenin (örneğin, kelime veya cümle) tüm tekrarlarını başka bir ifade ile değiştirmek için kullanılır. Fonksiyon, önce split-string aracılığıyla metni boşluklara göre parçalara ayırır, ardından her bir parçayı kontrol eder. Eğer parça, değiştirilmesi gereken eski ifade (old) ile eşleşiyorsa, yeni ifade (new) ile değiştirilir; aksi takdirde mevcut parça olduğu gibi bırakılır. Sonuç, tüm değişiklikler yapıldıktan sonra bir string olarak döndürülür. Bu yapı, metin üzerinde basit bir arama ve değiştirme işlemi gerçekleştirmeyi sağlar.
+
+3)"defun convert-variable-assignment (line)"
+
+convert-variable-assignment fonksiyonu, bir değişken atama ifadesini Lisp dilinde uygun bir biçime dönüştürmek için tasarlanmıştır. Fonksiyon, önce verilen satırı (line) eşittir (=) işareti etrafında iki parçaya böler; bu parçalar değişken adını ve atanan değeri içerir. string-trim fonksiyonu, her bir parçadan gereksiz boşlukları ve sonlandırıcı karakterleri temizler. Ardından, bu temizlenmiş değişken adı (var) ve değeri (value) kullanılarak Lisp diline uygun bir atama ifadesi oluşturulur. Sonuç olarak, fonksiyon, biçimlendirilmiş bir atama ifadesi döndürür, böylece geleneksel bir atama ifadesi, Lisp dilindeki setf fonksiyonu kullanılarak yeniden yazılmış olur.
+
+4)"defun convert-closing-brace (line)"
+convert-closing-brace fonksiyonu, verilen bir satırdaki } karakterlerini ) ile değiştirmek için tasarlanmıştır. Fonksiyon, satırı alır ve replace-all fonksiyonunu kullanarak tüm } karakterlerini hedef olarak belirtilen ) ile değiştirir. Bu işlem, özellikle kod dönüştürme veya belirli bir sözdizimi uyumu sağlama amacıyla faydalıdır; çünkü bazı dillerdeki kapanış parantezleri, Lisp gibi dillerde farklı bir yapıya dönüşmekte veya farklı parantezleme kuralları uygulanmaktadır. Sonuç olarak, fonksiyon, değiştirilen satırı döndürerek kullanıcının ihtiyaç duyduğu dönüşümü gerçekleştirir.
+
+5)"defun convert-if-statement (line)"
+convert-if-statement fonksiyonu, C tarzı bir if koşulunu alır ve bunu Lisp formatına dönüştürmek için tasarlanmıştır. Fonksiyon, öncelikle satırdaki parantezlerin konumlarını bulur; bu parantezler, koşul ifadesinin başlangıcını ve sonunu belirler. Eğer her iki parantez de bulunursa, koşul kısmı bu parantezlerin arasından ayıklanır. Ardından, koşuldaki operatörler (örneğin >, <, =, !) kullanılarak koşul, split-string3 fonksiyonu ile parçalanır. Bu parçalardan ilk operand, operatör ve ikinci operand sırasıyla elde edilir. Son olarak, elde edilen bu bileşenler Lisp formatında bir if ifadesine dönüştürülerek döndürülür. Eğer parantezlerden biri eksikse veya koşul geçersizse, fonksiyon "Geçersiz if ifadesi." mesajını döndürerek kullanıcıyı bilgilendirir. Bu fonksiyon, C tarzı kontrol yapılarının Lisp diline geçişini kolaylaştırmak için kullanışlıdır.
+6)"defun convert-increment-statement (line)"
+convert-increment-statement fonksiyonu, C veya benzeri dillerdeki artırma (++) ve azaltma (--) ifadelerini Lisp formatına dönüştürmek için tasarlanmıştır. Fonksiyon, öncelikle satırda ++ ifadesinin konumunu bulur. Eğer bu ifade bulunursa, o zaman ifadeyi oluşturan değişkeni, ++'den önceki kısmı alarak elde eder ve bu değişkeni Lisp'teki incf fonksiyonu ile biçimlendirerek döndürür. Eğer ++ ifadesi bulunamazsa, fonksiyon, aynı şekilde -- ifadesini kontrol eder. Eğer -- ifadesi bulunursa, yine değişkeni elde eder ve bu sefer decf fonksiyonu ile formatlayarak döndürür. Eğer hem ++ hem de -- ifadeleri bulunmazsa, fonksiyon orijinal satırı olduğu gibi döndürür. Bu sayede, artırma ve azaltma işlemleri için uygun Lisp sözdizimini oluşturmak mümkün olurken, desteklenmeyen ifadeler için orijinal metin korunur.
+
+7)"defun convert-for-loop (line)"
+
+convert-for-loop fonksiyonu, C tarzı bir for döngüsünü Lisp dilindeki loop ifadesine dönüştürmek için geliştirilmiştir. Fonksiyon, önce verilen satırda parantezlerin konumunu bulur ve eğer her iki parantez de mevcutsa, parantez içeriğini alır. İçerik, ; karakterine göre bölünerek döngünün başlangıç, koşul ve artış kısımları ayrıştırılır. Başlangıç kısmı int i = 0 gibi bir ifade olduğundan, bu ifade daha da parçalanarak değişken (i) ve başlangıç değeri (0) elde edilir. Koşul kısmı da aynı şekilde işlenir ve bitiş değeri (10) çıkarılır. Tüm bu bilgiler kullanılarak, Lisp dilinde uygun bir loop ifadesi oluşturulur ve bu ifade döndürülür. Eğer satırda geçersiz bir for döngüsü varsa, fonksiyon "Geçersiz for döngüsü ifadesi." mesajını döndürür. Bu sayede, C tarzı döngüler, Lisp sözdizimine uygun bir biçime dönüştürülmüş olur
+
+8)"defun convert-while-loop (line)"
+
+convert-while-loop fonksiyonu, C tarzı bir while döngüsünü Lisp dilindeki loop ifadesine dönüştürmek için tasarlanmıştır. Fonksiyon, öncelikle verilen satırda açılış ve kapanış parantezlerinin konumunu bulur. Eğer her iki parantez de mevcutsa, parantezler arasındaki koşul içeriği çıkarılır. Daha sonra, bu koşul, belirli operatörlere göre (>, <, =, !) bölünerek ilk operand, operatör ve ikinci operand elde edilir. Bu bileşenler kullanılarak, Lisp formatında uygun bir loop ifadesi oluşturulur. Eğer geçersiz bir while ifadesi varsa, fonksiyon "Geçersiz if ifadesi." mesajını döndürür. Böylece, C tarzı while döngüleri, Lisp dilinin sözdizimine uygun bir şekilde dönüştürülmüş olur.
+
+9)"defun replace-substring-in-string (string old-substring new-substring)"
+
+replace-substring-in-string fonksiyonu, bir dize içinde belirli bir alt dizeyi başka bir alt dize ile değiştirmek için kullanılır. Fonksiyon, başlangıç konumunu sıfır olarak ayarlar ve bir döngü başlatır. Her döngüde, belirtilen old-substring dizisinin konumu string içinde bulunur. Eğer alt dize mevcutsa, fonksiyon şu adımları izler:
+
+Dizenin old-substring'den önceki kısmını (subseq string 0 pos) ve new-substring'i birleştirir.
+Ardından, old-substring'in sonrasındaki kısmı (subseq string (+ pos (length old-substring))) ekler.
+Yeni dize string olarak güncellenir ve bir sonraki arama için başlangıç pozisyonu ayarlanır.
+Eğer old-substring dizisi bulunamazsa, döngü sona erer ve güncellenmiş dize döndürülür. Bu sayede, belirtilen alt dize tüm örnekleriyle kolayca değiştirilmiş olur.
+
+10)"defun extract-printf-content (line)"
+extract-printf-content fonksiyonu, bir printf ifadesinin içeriğini çıkarmak için tasarlanmıştır. Fonksiyon, bir satırda printf( ifadesini arar ve bulursa şu adımları izler:
+
+start değişkenine printf( ifadesinin başlangıç konumunu atar.
+Eğer start değeri bulunursa, content-start değişkenine printf( ifadesinin hemen sonrasındaki konumu atar (yani start + 7).
+Daha sonra bir döngü başlatır ve bu döngüde content-start konumundan başlayarak line dizisinin sonuna kadar ilerler.
+Her adımda, char değişkenine mevcut karakter atanır.
+Eğer karakter " (tırnak işareti) ise ve bu konum content-start'tan büyükse (yani ilk tırnağı atlayarak), döngü sona erer ve subseq fonksiyonu kullanılarak printf içeriği çıkarılır. Bu, tırnak işaretinin bir karakter ötesine kadar (yani içerik dahil) uzanan alt dizedir.
+Bu şekilde, printf ifadesinin içeriği, tırnak işaretlerini doğru bir şekilde işleyerek elde edilir. Eğer printf( ifadesi yoksa, fonksiyon nil döndürecektir.
+
+11)"defun convert-printf-call (line)"
+convert-printf-call fonksiyonu, C dilinde yazılmış bir printf çağrısını Lisp formatına dönüştürmek için tasarlanmıştır. Fonksiyon, öncelikle extract-printf-content fonksiyonunu kullanarak line içinde yer alan printf ifadesinin içeriğini çıkarır ve eğer içerik mevcutsa, \n karakterlerini Lisp’te yeni satır oluşturmak için ~% ile değiştirir. Bu değişiklik, replace-substring-in-string fonksiyonu aracılığıyla gerçekleştirilir. Sonuç olarak, dönüştürülen içerik (format t ~a) biçiminde bir formatlama ifadesine dönüştürülerek döndürülür; eğer printf ifadesi yoksa, fonksiyon orijinal satırı geri döner. Böylece, fonksiyon C dilindeki printf çağrılarını Lisp’in formatlama sistemine uyumlu hale getirerek kod dönüştürme işlemini kolaylaştırır.
+
+12)"defun extract-variable (line)"
+extract-variable fonksiyonu, verilen bir satırda (line) virgül ve kapanan parantez arasında bulunan değişken adını çıkarmak için kullanılır. Fonksiyon, öncelikle satırda virgülün konumunu (comma-pos) ve ardından kapanan parantezin konumunu (close-paren-pos) bulur. Eğer her iki konum da mevcutsa, subseq fonksiyonu aracılığıyla virgülden sonraki ve parantezden önceki kısımdaki metin alınır. Son olarak, string-trim fonksiyonu kullanılarak boşluk karakterleri temizlenir ve elde edilen değişken adı döndürülür. Bu sayede, fonksiyon belirli bir formatta (örneğin, bir fonksiyon çağrısında) yer alan değişken adını etkin bir şekilde çıkarır.
+
+13)"defun convert-printf-comma (line)"
+
+convert-printf-comma fonksiyonu, C dilindeki printf çağrısını Lisp formatına dönüştürürken, içindeki virgülleri de göz önünde bulundurur. Fonksiyon, ilk olarak extract-printf-content kullanarak printf ifadesinin içeriğini çıkarır ve extract-variable ile virgül arasında bulunan değişkeni elde eder. Eğer printf içeriği mevcutsa, replace-substring-in-string ile \n karakterlerini Lisp'in satır sonu gösterimi olan ~% ile değiştirir. Ardından, eğer bir değişken varsa, format fonksiyonu kullanılarak bu değişken ile birlikte dönüştürülmüş ifade oluşturulur; aksi takdirde, sadece formatlanmış dize döndürülür. Eğer printf ifadesi bulunamazsa, fonksiyon orijinal satırı geri döndürür. Bu, kullanıcıların C tarzı printf çağrılarını daha kullanışlı bir Lisp formatına dönüştürmelerine yardımcı olur.
+14)"defun convert-logical-operation (line)"
+
+convert-logical-operation fonksiyonu, C tarzı mantıksal atama ifadelerini Lisp sözdizimine dönüştürmek için tasarlanmıştır. Fonksiyon, girdi dizesindeki = karakterinin konumunu bulmaya başlar; bu, bir atama işlemini gösterir. Eğer eşit işareti bulunursa, fonksiyon, eşit işaretinden önceki değişken adını ve sonrasındaki ifadeyi alır, her ikisini de boşluklardan arındırır. Ardından, bu bileşenleri (setq değişken ifade) biçiminde bir Lisp ataması olarak formatlar; burada setq, Lisp'te bir değişkenin değerini ayarlamak için kullanılan standart bir yöntemdir. Eğer eşit işareti tespit edilmezse, fonksiyon orijinal satırı olduğu gibi döndürür, böylece beklenen formata uymayan satırları da işleyebilir. Bu fonksiyon, C benzeri kodları Lisp programlama ile uyumlu bir forma dönüştürmek için oldukça faydalıdır.
+15)"defun convert-expression (expr)"
+convert-expression fonksiyonu, bir mantıksal ifadede bulunan C tarzı operatörleri Lisp eşdeğerlerine dönüştürmek için kullanılır. Fonksiyon, girdi olarak aldığı expr (ifade) üzerinde çalışır ve belirli mantıksal operatörlerin varlığını kontrol eder. Öncelikle, && operatörü için and ile değiştirir, ardından || operatörünü or ile ve ! operatörünü not ile değiştirmek için replace-logical fonksiyonunu çağırır. Eğer bu mantıksal operatörlerden hiçbiri bulunamazsa, fonksiyon, ifadeyi değişmeden döndürür. Bu sayede, C dilinde yazılmış mantıksal ifadeleri Lisp diline uygun bir biçime dönüştürmek mümkün hale gelir.
+
+16)"defun replace-logical (expr old new)"
+replace-logical fonksiyonu, verilen bir mantıksal ifadede (EXPR) belirtilen eski operatörü (OLD) yeni operatörle (NEW) değiştirmek ve bunu Lisp sözdizimine uygun hale getirmek için kullanılır. Fonksiyon, önce ifade içinde eski operatörün pozisyonunu (op-pos) bulur. Daha sonra, operatörün solundaki kısmı (left) ve sağındaki kısmı (right) ayıklar; bu kısımda gereksiz boşlukları temizler. Son olarak, bu parçaları kullanarak, belirtilen yeni operatörü içeren bir Lisp ifadesi oluşturur. Örneğin, bir C tarzı mantıksal ifade olan "A && B" ifadesi, bu fonksiyon aracılığıyla "(and A B)" şeklinde bir Lisp ifadesine dönüştürülür. Bu fonksiyon, C tarzı mantıksal operatörlerin Lisp formatına dönüştürülmesinde kritik bir rol oynar.
+
+17)"defun convert-variable-definition (line)"
+convert-variable-definition fonksiyonu, bir C dilindeki değişken tanımını Lisp diline dönüştürmek için tasarlanmıştır. Fonksiyon, öncelikle verilen satırı eşit işareti (=) ile ayırarak değişken tanımını ve değerini elde eder. var-def değişkeni, değişkenin türünü ve adını içerirken, value değişkeni atanan değeri tutar. Değişken adı, var-parts listesi üzerinden elde edilir. Ardından, bu değişken adı ve değeri kullanılarak Lisp formatında bir ifade oluşturulur; bu ifade, "(değişken-değeri)" şeklindedir.
+
+Fonksiyonun önemli bir noktası, değişken tanımının çevrileceği yerin bir let ifadesinin içinde olup olmadığını kontrol etmesidir. Eğer henüz let eklenmemişse, *let-inserted* bayrağı t olarak ayarlanır ve dönüşüm, "let" ifadesi ile birlikte yapılır. Bu, Lisp'te yerel değişkenlerin tanımlanması için yaygın bir yaklaşımdır. Eğer let zaten eklenmişse, sadece dönüştürülen ifade döndürülür. Böylece, değişken tanımları, Lisp diline uygun bir şekilde işlenmiş olur.
+
+18)"defun convert-function-call (line)"
+
+convert-function-call fonksiyonu, C dilinde tanımlanmış bir fonksiyon çağrısını Lisp formatına dönüştürmek için kullanılır. Bu fonksiyon, verilen satırdan (C fonksiyon tanımını temsil eden line değişkeni) parse-function-call fonksiyonu aracılığıyla dönüş türünü, fonksiyon adını ve parametre listesini ayrıştırarak başlar. multiple-value-bind, birden fazla değer döndüren bir fonksiyonu kullanarak bu değerleri aynı anda alır.
+
+Daha sonra, extract-type fonksiyonu kullanılarak her bir parametrenin türü elde edilir ve mapcar ile bu türler üzerinde işlem yapılır. join-strings fonksiyonu ise elde edilen parametre türlerini bir boşluk ile birleştirerek tek bir dize haline getirir.
+
+Son olarak, format fonksiyonu kullanılarak, Lisp formatında bir declaim ifadesi oluşturulur. Bu ifade, fonksiyonun türünü tanımlamak için kullanılır. Fonksiyonun türü, parametre türleri ve dönüş türü c-type-to-lisp-type fonksiyonu ile Lisp türüne dönüştürülerek belirtilir. Böylece, C dilindeki fonksiyon tanımı, Lisp diline uygun bir biçimde temsil edilmiş olur.
+
+19)"defun parse-function-call (line)"
+parse-function-call fonksiyonu, C dilinde tanımlanmış bir fonksiyon satırını (örneğin, int add(int a, int b)) ayrıştırmak için kullanılır. Bu fonksiyon, giriş olarak aldığı line değişkenini işler ve fonksiyonun dönüş türünü, fonksiyon adını ve parametrelerini belirlemek amacıyla birkaç adım gerçekleştirir.
+
+Öncelikle, position fonksiyonu ile satırdaki ilk ( karakterinin pozisyonu bulunur. Bu pozisyon, fonksiyonun parametrelerinin başladığı yeri belirler. Ardından, subseq fonksiyonu kullanılarak, return-and-name adlı bir değişkende dönüş tipi ve fonksiyon adı elde edilir. Bunun için line değişkeninin 0 ile paren-pos arasında kalan kısmı alınır.
+
+Daha sonra, fonksiyonun parametreleri params değişkenine atanır; bu, line'ın paren-pos sonrasından başlayarak ) karakterinin pozisyonuna kadar olan kısmı içerir.
+
+Sonrasında, split-string fonksiyonu ile dönüş türü ve fonksiyon adı ayrıştırılır; dönüş türü, return-and-name değişkeninin ilk parçası olarak alınırken, fonksiyon adı ikinci parça olarak alınır.
+
+Son olarak, parametreler virgül ile ayrıldığından, split-string fonksiyonu kullanılarak param-list elde edilir. Bu işlem sonucunda, dönüş türü, fonksiyon adı ve parametre listesi değerleri döndürülür. Fonksiyon, birden fazla değer döndürdüğü için values fonksiyonu kullanılarak bu değerler döndürülür.
+20)"defun c-type-to-lisp-type (c-type)"
+
+c-type-to-lisp-type fonksiyonu, C dilinde kullanılan veri tiplerini Common Lisp dilindeki eşdeğerlerine dönüştürmek için tasarlanmıştır. Fonksiyon, bir C tipi alır ve bir cond yapısı kullanarak belirli koşullara göre dönüşüm gerçekleştirir. Örneğin, "int" tipi "integer", "float" tipi "float", "double" tipi "double-float", ve "char" tipi "character" olarak karşılık bulur. Eğer verilen C tipi tanınmıyorsa, fonksiyon "unknown-type" döndürerek bilinmeyen bir tür olduğunu belirtir. Bu sayede, C kodundan Lisp koduna geçiş sırasında veri tiplerinin doğru bir şekilde eşleştirilmesi sağlanır.
+
+21)"defun join-strings (strings separator)"
+join-strings fonksiyonu, bir dizi stringi belirtilen bir ayırıcıyla birleştirmek için kullanılan bir fonksiyondur. Fonksiyon, reduce işlemi ile çalışır ve verilen strings listesindeki her bir string üzerinde iki elemanı bir araya getirerek yeni bir string oluşturur. Bu işlem sırasında, lambda fonksiyonu kullanılarak, her iki stringin (x ve y) arasında belirtilen separator eklenir. Sonuç olarak, tüm stringlerin birleştirildiği tek bir string elde edilir. Örneğin, "a", "b", ve "c" gibi stringleri " - " ayırıcıyla birleştirildiğinde "a - b - c" gibi bir sonuç ortaya çıkar. Bu fonksiyon, özellikle dinamik olarak oluşturulan stringlerin belirli bir formatta sunulması gerektiğinde oldukça kullanışlıdır.
+
+22)"defun convert-function-definition (line)"
+
+convert-function-definition fonksiyonu, bir C fonksiyon tanımını Lisp formatına dönüştürmek için tasarlanmış bir fonksiyondur. Fonksiyon, ilk olarak parse-function-definition kullanarak fonksiyon adını ve parametrelerini ayrıştırır. Ardından, extract-param-name fonksiyonunu kullanarak parametre isimlerini elde eder. Son olarak, bu parametre isimlerini birleştirir ve Lisp dilinde uygun bir formatta (defun ...) ifadesi oluşturur. Örneğin, C dilinde tanımlanmış bir fonksiyon, Lisp'te daha okunabilir bir biçimde ifade edilerek dönüşüm sağlanmış olur. Bu dönüşüm, C ve Lisp arasındaki farklı sözdizimlerini yönetmek için kullanışlıdır.
+
+23)"defun parse-function-definition (line)"
+
+parse-function-definition fonksiyonu, bir fonksiyon tanımını ayrıştırarak adını ve parametrelerini elde etmek için tasarlanmıştır. Fonksiyon, önce verilen satırda ilk ( karakterinin pozisyonunu bulur ve bu pozisyondan itibaren fonksiyon adını ayıklar. Ardından, ( karakterinin ardından gelen parametreleri ayıklamak için satırı keser. Bu parametreler, virgül ile ayrılmış biçimde bulunur ve son olarak bu parametreler bir diziye dönüştürülür. Fonksiyon, ayrıştırılan fonksiyon adını ve parametre listesini döndürür. Bu işlev, C dilindeki bir fonksiyon tanımının yapısını anlamak ve bu yapıyı Lisp formatına dönüştürmek için temel bir adımdır.
+
+24)"defun convert-return-statement (line)"
+convert-return-statement fonksiyonu, C dilinde kullanılan return ifadesini Lisp formatına dönüştürmek için tasarlanmıştır. Fonksiyon, önce return kelimesinin bulunduğu konumu tespit eder ve bu noktadan itibaren sonraki değeri alır, boşluk ve sonlandırıcı karakterleri temizler. Ardından, dönüş değerinin içinde herhangi bir aritmetik operatör (+, -, *, /) olup olmadığını kontrol eder. Eğer bir aritmetik operatör bulunursa, convert-arithmetic-operation fonksiyonunu çağırarak bu değeri dönüştürür. Aksi takdirde, dönüş değerini olduğu gibi döndürür. Bu yapı, C'deki fonksiyon dönüş değerlerinin Lisp'e uygun biçimde aktarılmasını sağlar.
+
+25)"defun convert-arithmetic-operation (line)"
+convert-arithmetic-operation fonksiyonu, bir aritmetik işlemi C dilinden Lisp formatına dönüştürmek için kullanılır. Fonksiyon, verilen ifadeyi aritmetik operatörler (+, -, *, /) kullanarak parçalara ayırır. split-string2 fonksiyonu bu işlemi gerçekleştirir ve sonuç olarak operatörü ve iki operandı elde eder. Daha sonra, bu parçaları kullanarak Lisp formatında bir ifade oluşturur; örneğin, (+ a b) gibi bir yapı. Bu şekilde, C dilindeki aritmetik işlemler, Lisp diline uygun bir biçimde dönüştürülmüş olur.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

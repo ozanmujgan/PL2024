@@ -1,0 +1,22 @@
+(declaim (ftype (function (float int) integer) sum))
+(defun sum (a b)
+(+ a b)
+) 
+(defun main ()
+(x 10)
+(y 20)
+(result sum(x, y))
+(if (< x 25)
+(format t "Result is greater than 25~%")
+(setf x 5)
+) 
+(loop while (< i 5 ) do
+) 
+(setq x (and 1 0))
+(loop for i from 0 below 10 do 
+
+(format t "%d~%" i)
+) 
+0
+) 
+)
